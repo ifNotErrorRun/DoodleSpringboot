@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.1'
+    id 'io.spring.dependency-management' version '1.1.5'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+}
+
+group = 'com.chan'
+version = '0.0.1-SNAPSHOT'
+
+configurations {
+    asciidoctorExt
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+}
+
+ext {
+    snippetDir = file('build/generated-snippets')
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    outputs.dir snippetDir
+}
+
+tasks.named("asciidoctor") {
+    inputs.dir snippetDir
+    configurations 'asciidoctorExt'
+    dependsOn test
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from("build/docs/asciidoc") {
+        into 'BOOT-INF/classes/static/docs'
+    }
+}

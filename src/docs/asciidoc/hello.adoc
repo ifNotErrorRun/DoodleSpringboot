@@ -1,0 +1,22 @@
+= TEST API Document
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+
+== Test API
+
+=== Hello API
+
+==== Request
+
+include::{snippets}/ServerEventControllerTest/test_get_message_hello/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/ServerEventControllerTest/test_get_message_hello/http-response.adoc[]
+
+==== Response Schema
+
+include::{snippets}/ServerEventControllerTest/test_get_message_hello/response-fields.adoc[]
